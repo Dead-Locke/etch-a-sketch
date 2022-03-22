@@ -13,18 +13,40 @@
     </header>
     <main>
         <div class="controls">
-            <button id="color"> Pen Color</button>
-            <button class="thickness"> Pen Thickness</button>
-            <button class="background"> Background Color</button>
-            <br>
-            <button> [PH]</button>
-            <button> [PH]</button>
-            <br>
-            <button class="toggle"> Toggle Grid</button>
-            <div class="grid-slider">
-                <input type="range" min="16" max="100" value="16" class="slider"> 
-                <p>Grid Size: </p>
+
+            <div class="color-pickers">
+                <div>
+                    <input class="pen-color" type="color" value="#858585" name="pen color">
+                    <label for="pen-color">Pen Color</label>
+                </div>
+
+                <div>
+                    <input class="background" type="color" value="#FFFFFF" name="background-color">
+                    <label for="background-color">Background</label>
+                </div>
+
             </div>
+
+            <button class="thickness"> Pen Thickness</button>
+            <br>
+            <button> [PH]</button>
+            <button> [PH]</button>
+
+            <br>
+
+            <div class="color-pickers">
+                <div>
+                    <input class="grid-color" type="color" value="#A9A9A9" name="grid-color">
+                    <label for="grid-color">Grid Color</label>
+                </div>
+                <button class="toggle">Toggle Grid</button>
+            </div>
+
+            <div class="grid-slider">
+                <input class="slider" type="range" min="4" max="100" value="16" name="gridSize"> 
+                <label for="gridSize">Grid Size</label>
+            </div>
+
             <button class="reset"> Reset</button>
         </div>
 

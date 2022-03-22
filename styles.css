@@ -20,7 +20,7 @@ header {
 .controls{
     display: flex;
     gap: 1vw;
-    height: 50px;
+    height: 60px;
     text-align: center;
 }
 .grid-slider {
@@ -36,9 +36,16 @@ header {
 }
 
 .cell {
- border: 1px solid orange;
+ border: 1px solid darkgray;
 }
 
 .noBorder{
     border: none;
+}
+
+.color-pickers {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap:8px;
 }

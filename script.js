@@ -3,9 +3,11 @@ const penColor = document.querySelector('.pen-color');
 const toggleGrid = document.querySelector('.toggle');
 const gridSize = document.querySelector('.slider');
 const reset = document.querySelector('.reset');
-const background = document.querySelector('.background');
+const gridBackground = document.querySelector('.background');
 const gridColor = document.querySelector('.grid-color')
+const gridSizeNumbers = document.querySelectorAll('.grid-size-number');
 var mouseDownToggle = false;
+var rightMouseToggle = false;
 
 function createGrid(col,rows) {
     for(let i = 0; i < (col*rows); i++){
@@ -30,10 +32,11 @@ function main (){
         cells.forEach(x => x.classList.toggle('noBorder'));
     })
 
-    gridSize.addEventListener('change', () => {
+    gridSize.addEventListener('input', () => {
         clear();
         createGrid(gridSize.value, gridSize.value);
         enableColoring();
+        gridSizeNumbers.forEach(x => x.innerText = gridSize.value);
     })
 
     reset.addEventListener('click', () => {
@@ -44,34 +47,42 @@ function main (){
 function enableColoring(){
     const cells = document.querySelectorAll('.cell');
 
-    function colorFill(cell, color){ // match user selected color
+    function colorFill(cell, color){ // main coloring function
         cell.style.background = color;
     };
 
-    cells.forEach(cell => { //cell colloring events
+    cells.forEach(cell => { //cell coloring events
         cell.addEventListener('mousedown', () => {
             mouseDownToggle = true;
             colorFill(cell, penColor.value);
-        }); //color in on mouse click
+        }); //color in on left mouse click
+        
+        cell.addEventListener('contextmenu', () => {
+            rightMouseToggle = true;
+            colorFill(cell, gridBackground.value);
+        }); //'erase' on right mouse click
 
         cell.addEventListener('mouseenter', () => {
-            if(mouseDownToggle) colorFill(cell, penColor.value)
-        }); //if mouse is clicked, dragging will color cells
+            if(mouseDownToggle) colorFill(cell, penColor.value); //left mouse
+            if(rightMouseToggle) colorFill(cell, gridBackground.value) //right mouse
+        }); // dragging will color cells
         
         cell.addEventListener('mouseup', () => {
             mouseDownToggle = false;
+            rightMouseToggle = false;
         }); //remove drag coloring when mouse is unclicked
 
     });
 
-    background.addEventListener('change', () => { //background color
-        cells.forEach(cell => cell.style.background = background.value)
+    gridBackground.addEventListener('change', () => { //background color
+        cells.forEach(cell => cell.style.background = gridBackground.value)
     })
 
 
-    gridColor.addEventListener('change', () => {
+    gridColor.addEventListener('change', () => { //change grid color
         cells.forEach(cell => cell.style.borderColor = gridColor.value)
     })
+
 
 
 };

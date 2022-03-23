@@ -43,14 +43,19 @@
             </div>
 
             <div class="grid-slider">
+                <div>Grid Size</div>
                 <input class="slider" type="range" min="4" max="100" value="16" name="gridSize"> 
-                <label for="gridSize">Grid Size</label>
+                <div>
+                    <b class="grid-size-number">16</b> x
+                    <b class="grid-size-number">16</b>
+                </div>
             </div>
 
             <button class="reset"> Reset</button>
-        </div>
+        </div> 
+        <div class="tutorial">*Right click or hold to erase</div>
 
-         <div class="grid"></div>
+         <div class="grid" ondragstart ='return false;'></div>
 
     </main>
 

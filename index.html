@@ -9,53 +9,55 @@
 </head>
 <body>
     <header>
-        <h1>Etch-a-Sketch</h1>
+        <h1>Pixel-Sketch</h1>
     </header>
     <main>
+
+        <div>
+            <div id="grid" ondragstart ='return false;'oncontextmenu="return false"></div>
+        </div>
+
         <div class="controls">
-
-            <div class="color-pickers">
-                <div>
-                    <input class="pen-color" type="color" value="#858585" name="pen color">
-                    <label for="pen-color">Pen Color</label>
-                </div>
-
-                <div>
-                    <input class="background" type="color" value="#FFFFFF" name="background-color">
-                    <label for="background-color">Background</label>
-                </div>
-
+            <div class="colorPicker">
+                <input id="penColor" type="color" value="#404040">
+                <label class="colorBtn" for="penColor">Pen</label>
             </div>
 
-            <button class="thickness"> Pen Thickness</button>
-            <br>
-            <button> [PH]</button>
-            <button> [PH]</button>
-
-            <br>
-
-            <div class="color-pickers">
-                <div>
-                    <input class="grid-color" type="color" value="#A9A9A9" name="grid-color">
-                    <label for="grid-color">Grid Color</label>
-                </div>
-                <button class="toggle">Toggle Grid</button>
+            <div class="colorPicker">
+                <input id="background" type="color" value="#FFFFFF">
+                <label for="background">Background</label>
             </div>
 
-            <div class="grid-slider">
-                <div>Grid Size</div>
-                <input class="slider" type="range" min="4" max="100" value="16" name="gridSize"> 
-                <div>
-                    <b class="grid-size-number">16</b> x
-                    <b class="grid-size-number">16</b>
-                </div>
+
+            <button class="rainbow"> Rainbow Mode</button>
+            <button class="eye"> Eye Dropper</button>
+            <div class="saturation">
+                <button class="shade"> Enable Shading</button>
+                <button class="tint"> Enable Tinting</button>
             </div>
 
-            <button class="reset"> Reset</button>
+            <div>
+                <input id="gridColor" type="color" value="#A9A9A9">
+                <label for="gridColor">Grid Color</label>
+            </div>
+            <button id="toggle">Toggle Grid</button>
+            
+
+            <div class="gridSlider">
+                <input id="slider" type="range" min="4" max="80" value="20"> 
+                <p>Grid Size: <span class="grid-size-number">20</span> x
+                <span class="grid-size-number">20</span></p>
+            </div>
+
+            <div>
+                <button class="clear"> Clear Grid</button> 
+                <button class="reset"> Reset</button>
+            </div>
+            <div class="tutorial">*Right click or hold to erase</div>
         </div> 
-        <div class="tutorial">*Right click or hold to erase</div>
+        
 
-         <div class="grid" ondragstart ='return false;'></div>
+         
 
     </main>
 

@@ -14,34 +14,36 @@
     <main>
 
         <div>
-            <div id="grid" ondragstart ='return false;'oncontextmenu="return false"></div>
+            <div id="grid" ondragstart ="return false" oncontextmenu="return false"></div>
         </div>
 
         <div class="controls">
             <div class="colorPicker">
-                <input id="penColor" type="color" value="#404040">
+                <input id="penColor" type="color">
                 <label class="colorBtn" for="penColor">Pen</label>
             </div>
 
             <div class="colorPicker">
-                <input id="background" type="color" value="#FFFFFF">
+                <input id="background" type="color" >
                 <label for="background">Background</label>
             </div>
 
 
-            <button class="rainbow"> Rainbow Mode</button>
-            <button class="eye"> Eye Dropper</button>
-            <div class="saturation">
-                <button class="shade"> Enable Shading</button>
-                <button class="tint"> Enable Tinting</button>
+            <button id="rainbow"> Rainbow Mode</button>
+            <button id="sampler"> Color Sampler</button>
+            <button id="fill"> Bucket Fill</button>
+            <div>
+                <button id="shade"> Enable Shading</button>
+                <button id="tint"> Enable Tinting</button>
             </div>
+            
 
             <div>
-                <input id="gridColor" type="color" value="#A9A9A9">
+                <input id="gridColor" type="color">
                 <label for="gridColor">Grid Color</label>
             </div>
+
             <button id="toggle">Toggle Grid</button>
-            
 
             <div class="gridSlider">
                 <input id="slider" type="range" min="4" max="80" value="20"> 
@@ -49,11 +51,10 @@
                 <span class="grid-size-number">20</span></p>
             </div>
 
-            <div>
-                <button class="clear"> Clear Grid</button> 
-                <button class="reset"> Reset</button>
-            </div>
-            <div class="tutorial">*Right click or hold to erase</div>
+            <button class="clear"> Clear Grid</button> 
+            <button class="reset"> Reset</button>
+            
+            <div class="tutorial">*Right click/hold to erase</div>
         </div> 
         
 

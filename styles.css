@@ -5,6 +5,7 @@ main {
     
 }
 
+
 header {
     display: flex;
     justify-content: center;
@@ -26,7 +27,7 @@ header {
     text-align: center;
 }
 .gridSlider {
-    align-self: center;
+    
 }
 
 #grid {
@@ -49,8 +50,13 @@ header {
 }
 
 button {
-    width: 100%;
+    width: 150px;
+    height: 25px;
     margin-bottom: 10px;
+}
+.saturation{
+    display: flex;
+    flex-direction: column;
 }
 
 .colorPickers {
@@ -64,5 +70,8 @@ input.grid-color, input.background, input.pen-color {
 
 }
 
+.enabled{
+    box-shadow: 5px 10px red;
+}
 
   

@@ -54,7 +54,7 @@ button {
     height: 25px;
     margin-bottom: 10px;
 }
-.saturation{
+.shadetint{
     display: flex;
     flex-direction: column;
 }

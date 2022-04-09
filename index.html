@@ -5,63 +5,70 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="styles.css">
-    <title>Etch-a-Sketch</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+
+    <title>Etch-a-Sketch Project</title>
 </head>
 <body>
     <header>
-        <h1>Pixel-Sketch</h1>
+        <h1>PIXEL-SKETCH</h1>
     </header>
     <main>
-
-        <div>
-            <div id="grid" ondragstart ="return false" oncontextmenu="return false"></div>
-        </div>
-
-        <div class="controls">
-            <div class="colorPicker">
-                <input id="penColor" type="color">
-                <label class="colorBtn" for="penColor">Pen</label>
-            </div>
-
-            <div class="colorPicker">
-                <input id="background" type="color" >
-                <label for="background">Background</label>
-            </div>
-
-
-            <button id="rainbow"> Rainbow Mode</button>
-            <button id="sampler"> Color Sampler</button>
-            <button id="fill"> Bucket Fill</button>
-            <div class="shadetint">
-                <button id="shade"> Enable Shading</button>
-                <button id="tint"> Enable Tinting</button>
-            </div>
-            
-
+        <div class="backpane">
             <div>
-                <input id="gridColor" type="color">
-                <label for="gridColor">Grid Color</label>
+                <div id="grid" ondragstart ="return false" oncontextmenu="return false"></div>
             </div>
-
-            <button id="toggle">Toggle Grid</button>
-
-            <div class="gridSlider">
-                <input id="slider" type="range" min="4" max="80" value="20"> 
-                <p>Grid Size: <span class="grid-size-number">20</span> x
-                <span class="grid-size-number">20</span></p>
+    
+            <div class="controls">
+                <div class="colorPicker">
+                    <input id="penColor" type="color">
+                    <label class="colorBtn" for="penColor">Pen</label>
+                </div>
+    
+                <div class="colorPicker">
+                    <input id="background" type="color" >
+                    <label for="background">Background</label>
+                </div>
+    
+    
+                <button id="rainbow"> Rainbow Mode</button>
+                <button id="sampler"> Color Sampler</button>
+                <button id="fill"> Bucket Fill</button>
+                <div class="shadetint">
+                    <button id="shade"> Enable Shading</button>
+                    <button id="tint"> Enable Tinting</button>
+                </div>
+    
+    
+                <div>
+                    <input id="gridColor" type="color">
+                    <label for="gridColor">Grid Color</label>
+                </div>
+    
+                <button id="toggle">Toggle Grid</button>
+    
+                <div class="gridSlider">
+                    <input id="slider" type="range" min="4" max="80" value="20">
+                    <p>Grid Size: <span class="grid-size-number"></span> x
+                    <span class="grid-size-number"></span></p>
+                </div>
+    
+                <button class="clear"> Clear Grid</button>
+                <button class="reset"> Reset</button>
+    
+                <div class="tutorial">*Right click/hold to erase</div>
             </div>
-
-            <button class="clear"> Clear Grid</button> 
-            <button class="reset"> Reset</button>
-            
-            <div class="tutorial">*Right click/hold to erase</div>
-        </div> 
-        
-
-         
-
+        </div>
     </main>
-
+    <footer>
+        <p>Thanks for playing! Made by Dead-Locke</p>
+        <a href="https://github.com/Dead-Locke/">
+            <img class="link-icon" src="images/GitHub-Mark.png" alt="GitHub Link">
+        </a>
+    </footer>
     <script src="script.js"></script>
 </body>
 </html>

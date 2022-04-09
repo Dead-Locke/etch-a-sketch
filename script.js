@@ -1,10 +1,10 @@
-const DEFAULT_COLOR = "#404040"
-const DEFAULT_BACK = "#FFFFFF"
-const DEFAULT_GRID = "#696969"
-const DEFAULT_MODE = "user"
-const DEFAULT_SIZE = 20;
-const DEFAULT_SHADE = -20
-const DEFAULT_TINT = 20
+const DEFAULT_COLOR = "#404040" //pen color
+const DEFAULT_BACK = "#FFFFFF" //background color
+const DEFAULT_GRID = "#E52379" //grid lines color
+const DEFAULT_MODE = "user"  
+const DEFAULT_SIZE = 20;  // NxN grid size
+const DEFAULT_SHADE = -20 //shade value to add to each r,g,b value
+const DEFAULT_TINT = 20 //tint value to add to each r,g,b value
 
 const penColor = document.querySelector('#penColor');
 const backColor = document.querySelector('#background');
@@ -22,20 +22,18 @@ const gridSize = document.querySelector('#slider');
 const gridSizeNumbers = document.querySelectorAll('.grid-size-number');
 
 penColor.value = DEFAULT_COLOR;
-backColor.value = DEFAULT_BACK;
 gridColor.value = DEFAULT_GRID;
 
-var grid2D;
 var coloringMode = DEFAULT_MODE;
-var rightMouseToggle = false;
-var gridToggle = false;
 var mouseDownToggle = false;
+var rightMouseToggle = false;
+var gridToggle = true;
+
 grid.onmousedown =() => mouseDownToggle = true;
 grid.onmouseup =() => {mouseDownToggle = false; rightMouseToggle = false;} 
-
 reset.onclick = () => window.location.reload();
-clearGridBtn.onclick = () => createGrid(gridSize.value);
-gridSize.oninput = () => createGrid(gridSize.value);
+clearGridBtn.onclick = () => createGrid(+gridSize.value);
+gridSize.oninput = () => createGrid(+gridSize.value);
 rainbowModeBtn.onclick = () => changeMode('rainbow');
 samplerBtn.onclick = () => changeMode('sampler');
 fillBtn.onclick = () => changeMode('fill')
@@ -48,41 +46,56 @@ toggleGridBtn.onclick = () => { // grid toggle
     gridToggle = !gridToggle; //toggle the boolean marker
 }
 
-clear = () => {while(grid.firstChild){grid.removeChild(grid.firstChild)}} //remove every cell from the grid
 
 function createGrid(gridSide) { //grid creation
     clear() //clear grid just in case
+    let edges = getRightBottomEdges(gridSide);
     grid.style.gridTemplateColumns = `repeat(${gridSide}, 1fr)`; //generate tracks
     grid.style.gridTemplateRows = `repeat(${gridSide},1fr)`; 
+
     for(let i = 0; i < (gridSide*gridSide); i++){
         const cell = document.createElement('div')
         grid.appendChild(cell).classList.add('cell')
         cell.setAttribute('id',`${i}`); //number cells for id
         
-        cell.onmousedown = () => colorChange(cell); //color in on left mouse click
+        cell.onmousedown = () => {if(coloringMode != 'fill') colorChange(cell)} //color in on left mouse down but not when in fill mode. Avoids coloring in on right click
+        cell.onclick = () => {if(coloringMode=='fill') colorChange(cell)} //onclick only in fill mode. Otherwise it fills on right click but erases clicked square. Avoids duplicate with onmousedown.
         cell.oncontextmenu = () => {rightMouseToggle = true; colorChange(cell); }; //'erase' on right mouse click
         cell.onmouseover= () => {if(mouseDownToggle) colorChange(cell);} //fill grid if right mouse is held
+        if(edges[0].includes(i)) cell.style.borderRight = '1px solid'; //add border tright and bottom edges of the grid
+        if(edges[1].includes(i)) cell.style.borderBottom = '1px solid';
     }
     
     gridSizeNumbers.forEach(x => x.innerText = gridSize.value) //change the grid Num x Num display
-    grid.style.background = backColor.value; //color in background
+    if(grid.style.background){grid.style.background = backColor.value;} //color in background if a different color was chosen
     retainGridLines();
-    markRowAndColumn();//mark each cell with a row-column value
+    
 }
 
-function retainGridLines (){ // retain grid toggle and color
+clear = () => {while(grid.lastChild){grid.lastChild.remove()}} //remove every cell from the grid
+
+function getRightBottomEdges(side) {
+    let right = [], bottom = [];
+    for(let j = (side*side-side); j < side*side; j++) bottom.push(j);
+    for(let i =(side-1); i < (side*side); i= i+side) right.push(i);
+    console.log(right, bottom)
+    return [right, bottom]
+
+}
+
+function retainGridLines (){ // retain grid toggle and color for clear function
     const cells = document.querySelectorAll('.cell');
     cells.forEach(cell => cell.style.borderColor = gridColor.value);
-    if(gridToggle) cells.forEach(x => x.classList.add('noBorder'))
+    if(!gridToggle) cells.forEach(x => x.classList.add('noBorder'))
 };
 
 
 function colorChange(cell){ // main cell coloring function based on coloringMode
     let cellColor = cell.style.backgroundColor
     let gridBack = grid.style.background
-    if(rightMouseToggle) cell.style.background = 'transparent'; //erase
 
-    if(coloringMode == 'user' && !rightMouseToggle) 
+    if(rightMouseToggle) cell.style.background = ''; //erase
+    if(coloringMode == 'user' && !rightMouseToggle) //default mode
         cell.style.background =  penColor.value;
 
     if(coloringMode == 'rainbow' && !rightMouseToggle)
@@ -104,9 +117,8 @@ function colorChange(cell){ // main cell coloring function based on coloringMode
 };
 
 function changeMode(mode) {
-    
     document.querySelectorAll('.enabled').forEach(x=> x.classList.remove('enabled')) //remove all button highlights
-    modeButton = document.querySelector(`#${mode}`); //find appropriate clicked button based on mode
+    modeButton = document.querySelector(`#${mode}`); //find the clicked button based on mode
     if(coloringMode != mode) {
         coloringMode = mode; //switch mode
         modeButton.classList.add('enabled'); //highlight button
@@ -117,7 +129,7 @@ function changeMode(mode) {
     }; 
 }
 
-function randomInt(min, max){ //random integer within a given range
+function randomInt(min, max){ //random integer in range
     return Math.floor(Math.random()*(max-min) + min)
 }
   
@@ -145,70 +157,66 @@ function rgbToHex(color){ //rgb to hex converter
 
 
 function fill(cell, givenColor) {
-    let id = +cell.id; //conert cell id to number
-    let row = Math.floor(id /gridSize.value) //get row from id (avoided using the class since that would require regex filtering)
-    let column = id % gridSize.value;
-    let cellsToCheck = [[row,column]];
-    let checkedCells = {}; //store checked cell row/column values.
+    let id = +cell.id; //convert cell id to number
+    
+    let cellsToCheck = [id];
+    let checkedCells = {}; //store checked cell id:boolean association
     while(cellsToCheck.length){
-        let next = cellsToCheck.shift();
-        document.getElementsByClassName(`${next[0]}-${next[1]}`)[0].style.background = penColor.value; 
-        cellsToCheck = cellsToCheck.concat(adjacentCells(next, givenColor, checkedCells))
+        let nextID = cellsToCheck.shift();
+        document.getElementById(nextID).style.background = penColor.value; 
+        cellsToCheck = cellsToCheck.concat(adjacentCells(nextID, givenColor, checkedCells))
     }
     return;
 }
 
-function adjacentCells(cellIndex, color, checkedCells){
+function adjacentCells(id, color, checkedCells){
     let adjacent = [];
-    let row = cellIndex[0]
-    let column = cellIndex[1]
-    let leftCell = document.getElementsByClassName(`${row}-${column-1}`)[0]
-    let rightCell = document.getElementsByClassName(`${row}-${column+1}`)[0]
-    let topCell = document.getElementsByClassName(`${row-1}-${column}`)[0]
-    let bottomCell = document.getElementsByClassName(`${row+1}-${column}`)[0]
+    let size = +gridSize.value
 
-    if(column > 0 && !checkedCells[[row,column-1]]){//check left cell if it has not been checked, without going over edges of grid
-        checkedCells[[row,column-1]] = true; //add cell to checked object
-        if(leftCell.style.background == color) //same color as the cell clicked on originally?
-            adjacent.push([row, column-1])//add to adjacent
+    //convert id to row/column in 2D grid, to test if adjacent cells are on the edges.
+    let row = Math.floor(id /gridSize.value);
+    let column = id % gridSize.value;
+    
+    const leftCell = document.getElementById(`${id-1}`)
+    const rightCell = document.getElementById(`${id+1}`)
+    const topCell = document.getElementById(`${id-size}`)
+    const bottomCell = document.getElementById(`${id+size}`)
+    
+    if(column > 0 && !checkedCells[id-1]){//check if left cell  has not been checked, without going over edges of grid
+        checkedCells[id-1] = true; //add cell to checked object
+        if(leftCell.style.background == color) //check if same color as the cell clicked on originally?
+            adjacent.push(id-1)//add to adjacent
     }
-    if(column < gridSize.value-1 && !checkedCells[[row,column+1]]){//right
-        checkedCells[[row,column+1]] = true;
+    if(column < size-1 && !checkedCells[id+1]){//right
+        checkedCells[id+1] = true;
         if(rightCell.style.background == color)
-            adjacent.push([row, column+1])
+            adjacent.push(id+1)
     }
-    if(row > 0 && !checkedCells[[row-1,column]]){//above
-        checkedCells[[row-1,column]] = true;
+    if(row > 0 && !checkedCells[id-size]){//above
+        checkedCells[id-size] = true;
         if(topCell.style.background == color)
-            adjacent.push([row-1, column])
+            adjacent.push(id-size)
     }
-    if(row < gridSize.value-1 && !checkedCells[[row+1,column]]){//below
-        checkedCells[[row+1,column]] = true;
-        if(bottomCell.style.background == color)
-            adjacent.push([row+1, column])
+    if(row < size-1 && !checkedCells[id+size]){//below
+        checkedCells[id+size] = true;
+        if(bottomCell.style.backgroundColor == color)
+            adjacent.push(id+size)
     }
   
     return adjacent;
 }
-
-//the function below, and the above reliance on it might be unnecessary. You could just determine 
-// the row and column values from the id, and use them to represent the given position of a cell. 
-// this would be fine for determineing if a cell is at an edge.
-// however to refer to the adjacent cells, you would need to convert the new [row-1, column ] 
-// or [row, column+1] back to id via (row*gridSize.value+column)formula
-function markRowAndColumn(){//adds a class in the form "ROW-COLUMN" to each cell marking its position in a 2D grid.
-    grid.childNodes.forEach(node => {
-        let id = +node.id; 
-        let row = Math.floor(id /gridSize.value)
-        let column= id % gridSize.value;
-        node.classList.add(`${row}-${column}`)
-    } )
-}
-    
-
 
 
 window.onload = () => {
     createGrid(DEFAULT_SIZE);
 }
 
+// function markRowAndColumn(){//adds a class in the form "ROW-COLUMN" to each cell marking its position in a 2D grid.
+//     grid.childNodes.forEach(node => {
+//         let id = +node.id; 
+//         let row = Math.floor(id /gridSize.value)
+//         let column= id % gridSize.value;
+//         node.classList.add(`${row}-${column}`)
+//     } )
+// }
+    

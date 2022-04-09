@@ -5,6 +5,14 @@
 } 
 body{
     font-family: 'Press Start 2P';
+    background-color: #140420;
+/* 
+#FF7486 - rose pink
+#FC0174 - neon pink
+#C70554 - maroon
+#310A3F - purple
+#140420 - black
+     */
 }
 
 main {
@@ -12,24 +20,19 @@ main {
     color: white;
     display: flex;
     justify-content: center;
-    background-color: black;
-    width: 100%;
-    height: 50%;
-    padding: 3% 0;
+   
+    padding: 30px 0;
 }
 
-.backpane{
-    display: flex;
-    gap: 10%;
-}
 
 header {
     font-size: 18px;;
-    padding-top: 30px;
+    margin-top: 30px;
     display: flex;
     justify-content: center;
+    text-align: center;
     -webkit-text-stroke: 1px white;
-    background: linear-gradient(-45deg, black ,#5f0a87, #ff00b3 , #5f0a87, black);
+    /* background: linear-gradient(-45deg, #140420 ,#5f0a87, #ff00b3 , #5f0a87, black); */
     animation: gradient 30s ease infinite;
     background-size: 500% 500%;
 }
@@ -45,33 +48,22 @@ header {
 		background-position: 0% 50%;
 	}
 }
-
-.line {
+.backpane{
     display: flex;
-    width: 100%;
-    height: auto;
+    gap: 10%;
+    margin: 0 5em;
 }
 
-.controls{
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    justify-content: center;
-    gap: 10px;
-    width: 200px;
-    text-align: center;
-}
-.gridSlider {
-    
-}
-
+/* ---------------main grid and its cells ------------------ */
 #grid {
-    background: linear-gradient(180deg, #15084D ,#5f0a87);
-    /* border: 5px solid black; */
+    background: linear-gradient(0deg, #15084D ,#140420 ,#C70554,#140420,#5f0a87);
+    border: 3px solid #C70554;
+    border-radius: 8px;
     display: grid;
     width: 720px;
     height: 720px; 
-
+    animation: gradient 5s ease infinite;
+    background-size: auto;
     padding: 0;
 }
 
@@ -80,15 +72,41 @@ header {
     border-left: 1px solid darkgray;
     background-color: transparent;
 }
-
-.noBorder{
+/* --------cell border classes -------- */
+.cell.noBorder{
     border: none;
+}
+.borderRight {
+    border-right: 1px solid;
+}
+.borderBottom{
+    border-bottom: 1px solid;
+}
+/* ---------------controls and its buttons -------------- */
+.controls{
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: center;
+    gap: 10px;
+    width: 250px;
+    text-align: center;
+    border: 5px solid #C70554;
+    border-radius: 10px;
+    padding: 0 35px;
 }
 
 button {
-    width: 150px;
-    height: 25px;
-    margin-bottom: 10px;
+    color: white;
+    font-size: 16px;
+    width:13.5em;
+    background: none;
+    border: 2px solid;
+    line-height: 1;
+    margin: 0.2em;
+    padding: 0.7em 2em;
+    border: 1px solid #ff00b3;
+    border-radius: 8px;
 }
 .shadetint{
     display: flex;
@@ -107,7 +125,7 @@ input.grid-color, input.background, input.pen-color {
 }
 
 .enabled{
-    box-shadow: 5px 10px red;
+    box-shadow: 5px 10px #5f0a87;
 }
 
 footer{
@@ -116,14 +134,11 @@ footer{
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 1vw;
-    bottom: 0;
+    gap: 10px;
     height: 50px;
-    width: 100%;
-    background-color: white;
-    border-top: 5px solid #5f0a87;
+    border-top: 5px solid #C70554;
     text-align: center;
-    background-color: black;
+    
 }
 
 .link-icon{

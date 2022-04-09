@@ -1,5 +1,5 @@
 const DEFAULT_COLOR = "#404040" //pen color
-const DEFAULT_BACK = "#FFFFFF" //background color
+const DEFAULT_BACK = "#D1D1D1" //background color
 const DEFAULT_GRID = "#E52379" //grid lines color
 const DEFAULT_MODE = "user"  
 const DEFAULT_SIZE = 20;  // NxN grid size
@@ -20,9 +20,6 @@ const gridColor = document.querySelector('#gridColor');
 const grid = document.querySelector("#grid");
 const gridSize = document.querySelector('#slider');
 const gridSizeNumbers = document.querySelectorAll('.grid-size-number');
-
-penColor.value = DEFAULT_COLOR;
-gridColor.value = DEFAULT_GRID;
 
 var coloringMode = DEFAULT_MODE;
 var mouseDownToggle = false;
@@ -46,6 +43,9 @@ toggleGridBtn.onclick = () => { // grid toggle
     gridToggle = !gridToggle; //toggle the boolean marker
 }
 
+penColor.value = DEFAULT_COLOR;
+gridColor.value = DEFAULT_GRID;
+backColor.value = DEFAULT_BACK;
 
 function createGrid(gridSide) { //grid creation
     clear() //clear grid just in case
@@ -62,8 +62,8 @@ function createGrid(gridSide) { //grid creation
         cell.onclick = () => {if(coloringMode=='fill') colorChange(cell)} //onclick only in fill mode. Otherwise it fills on right click but erases clicked square. Avoids duplicate with onmousedown.
         cell.oncontextmenu = () => {rightMouseToggle = true; colorChange(cell); }; //'erase' on right mouse click
         cell.onmouseover= () => {if(mouseDownToggle) colorChange(cell);} //fill grid if right mouse is held
-        if(edges[0].includes(i)) cell.style.borderRight = '1px solid'; //add border tright and bottom edges of the grid
-        if(edges[1].includes(i)) cell.style.borderBottom = '1px solid';
+        if(edges[0].includes(i)) cell.classList.add('borderRight') //add border tright and bottom edges of the grid
+        if(edges[1].includes(i)) cell.classList.add('borderBottom')
     }
     
     gridSizeNumbers.forEach(x => x.innerText = gridSize.value) //change the grid Num x Num display
@@ -78,7 +78,6 @@ function getRightBottomEdges(side) {
     let right = [], bottom = [];
     for(let j = (side*side-side); j < side*side; j++) bottom.push(j);
     for(let i =(side-1); i < (side*side); i= i+side) right.push(i);
-    console.log(right, bottom)
     return [right, bottom]
 
 }

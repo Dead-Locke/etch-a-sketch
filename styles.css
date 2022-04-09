@@ -1,14 +1,49 @@
-
-main {
-    display: flex;
-    justify-content: center;
-    
+*{
+    margin-left:0;
+    margin-right:0;
+    margin-top: 0;
+} 
+body{
+    font-family: 'Press Start 2P';
 }
 
-
-header {
+main {
+    font-size: 12px;
+    color: white;
     display: flex;
     justify-content: center;
+    background-color: black;
+    width: 100%;
+    height: 50%;
+    padding: 3% 0;
+}
+
+.backpane{
+    display: flex;
+    gap: 10%;
+}
+
+header {
+    font-size: 18px;;
+    padding-top: 30px;
+    display: flex;
+    justify-content: center;
+    -webkit-text-stroke: 1px white;
+    background: linear-gradient(-45deg, black ,#5f0a87, #ff00b3 , #5f0a87, black);
+    animation: gradient 30s ease infinite;
+    background-size: 500% 500%;
+}
+
+@keyframes gradient {
+	0% {
+		background-position: 0% 50%;
+	}
+	50% {
+		background-position: 100% 50%;
+	}
+	100% {
+		background-position: 0% 50%;
+	}
 }
 
 .line {
@@ -31,11 +66,12 @@ header {
 }
 
 #grid {
-    border: 2px solid black;
+    background: linear-gradient(180deg, #15084D ,#5f0a87);
+    /* border: 5px solid black; */
     display: grid;
     width: 720px;
     height: 720px; 
-    margin: 10px;
+
     padding: 0;
 }
 
@@ -74,4 +110,25 @@ input.grid-color, input.background, input.pen-color {
     box-shadow: 5px 10px red;
 }
 
+footer{
+    font-size: 8px;
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1vw;
+    bottom: 0;
+    height: 50px;
+    width: 100%;
+    background-color: white;
+    border-top: 5px solid #5f0a87;
+    text-align: center;
+    background-color: black;
+}
+
+.link-icon{
+    width: 20px;
+    height: 20px;
+    padding-bottom: 10px;
+}
   

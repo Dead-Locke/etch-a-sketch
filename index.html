@@ -8,9 +8,9 @@
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
-
-    <title>Etch-a-Sketch Project</title>
+    <link href="https://fonts.googleapis.com/css2?family=Bungee&family=Bungee+Hairline&family=Bungee+Outline&family=Monoton&family=Orbitron&family=Press+Start+2P&display=swap" rel="stylesheet">
+    
+    <title>Pixel-Sketch Project</title>
 </head>
 <body>
     <header>
@@ -19,12 +19,12 @@
     <main>
         <div class="backpane">
             <div>
-                <div id="grid" ondragstart ="return false" oncontextmenu="return false"></div>
+                <div id="grid" class="gradient-border" ondragstart ="return false" oncontextmenu="return false"></div>
             </div>
     
-            <div class="controls">
-                <div class="tutorial">*Right click/hold to erase</div>
-                <br>
+            <div class="controls gradient-border">
+                <div class="tutorial">Hint: Right click to erase!</div>
+                
                 <div class="colorPicker">
                     <input id="penColor" type="color">
                     <label class="colorBtn" for="penColor">Pen</label>
@@ -34,34 +34,37 @@
                     <input id="background" type="color" >
                     <label for="background">Background</label>
                 </div>
-                <div>
+                <div class="colorPicker">
                     <input id="gridColor" type="color">
                     <label for="gridColor">Grid</label>
                 </div>
-                <button id="toggle">Toggle Grid</button>
-    
-                <button id="rainbow"> Rainbow Mode</button>
-                <div>
+            
+
+                <div class="gridSlider">
+                    <div class="sliderFill"></div>
+                    <input id="slider" type="range" min="4" max="80">
+                    <p class="sliderInfo">Grid Size: <span class="grid-size-number"></span> x <span class="grid-size-number"></span></p>
+                </div>
+
+                <div class="toggle-rainbow">
+                    <button id="toggle">Toggle Grid</button>
+                    <button id="rainbow"> Rainbow Mode</button>
+                </div>
+
+
+                <div class="sampler-fill">
                     <button id="sampler"> Color Sampler</button>
                     <button id="fill">Fill</button>
                 </div>
-                <div class="shadetint">
+                <div class="shade-tint">
                     <button id="shade"> Enable Shading</button>
                     <button id="tint"> Enable Tinting</button>
                 </div>
-    
+
     
                 
     
-
-    
-                <div class="gridSlider">
-                    <input id="slider" type="range" min="4" max="80" value="20">
-                    <p>Grid Size: <span class="grid-size-number"></span> x
-                    <span class="grid-size-number"></span></p>
-                </div>
-    
-                <div>
+                <div class="clear-reset">
                     <button class="clear"> Clear Grid</button>
                     <button class="reset"> Reset</button>
                 </div>

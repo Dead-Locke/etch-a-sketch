@@ -1,6 +1,6 @@
-const DEFAULT_COLOR = "#404040" //pen color
-const DEFAULT_BACK = "#D1D1D1" //background color
-const DEFAULT_GRID = "#E52379" //grid lines color
+const DEFAULT_COLOR = "#64C3D3" //pen color
+const DEFAULT_BACK = "#000000" //background color
+const DEFAULT_GRID = "#971C53" //grid lines color
 const DEFAULT_MODE = "user"  
 const DEFAULT_SIZE = 20;  // NxN grid size
 const DEFAULT_SHADE = -20 //shade value to add to each r,g,b value
@@ -20,6 +20,7 @@ const gridColor = document.querySelector('#gridColor');
 const grid = document.querySelector("#grid");
 const gridSize = document.querySelector('#slider');
 const gridSizeNumbers = document.querySelectorAll('.grid-size-number');
+const sliderFill = document.querySelector('.sliderFill');
 
 var coloringMode = DEFAULT_MODE;
 var mouseDownToggle = false;
@@ -46,6 +47,7 @@ toggleGridBtn.onclick = () => { // grid toggle
 penColor.value = DEFAULT_COLOR;
 gridColor.value = DEFAULT_GRID;
 backColor.value = DEFAULT_BACK;
+gridSize.value = DEFAULT_SIZE;
 
 function createGrid(gridSide) { //grid creation
     clear() //clear grid just in case
@@ -65,9 +67,9 @@ function createGrid(gridSide) { //grid creation
         if(edges[0].includes(i)) cell.classList.add('borderRight') //add border tright and bottom edges of the grid
         if(edges[1].includes(i)) cell.classList.add('borderBottom')
     }
-    
+    sliderFill.style.width = `${gridSide/.8}%` //adjust the slider fill
     gridSizeNumbers.forEach(x => x.innerText = gridSize.value) //change the grid Num x Num display
-    if(grid.style.background){grid.style.background = backColor.value;} //color in background if a different color was chosen
+    grid.style.background = backColor.value //color in background
     retainGridLines();
     
 }
@@ -138,7 +140,7 @@ function adjustColor(color, value){ //shade/tint . color is  rbg(), value is <0 
     var g = match[2];
     var b = match[3];
     r = +r + value; g = +g + value; b  = +b + value; //shade or tint based on value
-    if(r>255) r = 255; if(r<0) r =0; //limits
+    if(r>255) r = 255; if(r<0) r =0; //limits 0 to 255
     if(g>255) g = 255; if(g<0) g =0;
     if(b>255) b = 255; if(b<0) b =0;
     return `rgb(${r},${g},${b})`; 
@@ -209,13 +211,3 @@ function adjacentCells(id, color, checkedCells){
 window.onload = () => {
     createGrid(DEFAULT_SIZE);
 }
-
-// function markRowAndColumn(){//adds a class in the form "ROW-COLUMN" to each cell marking its position in a 2D grid.
-//     grid.childNodes.forEach(node => {
-//         let id = +node.id; 
-//         let row = Math.floor(id /gridSize.value)
-//         let column= id % gridSize.value;
-//         node.classList.add(`${row}-${column}`)
-//     } )
-// }
-    

@@ -3,68 +3,75 @@
     margin-right:0;
     margin-top: 0;
 } 
-body{
-    font-family: 'Press Start 2P';
-    background-color: #140420;
-/* 
-#FF7486 - rose pink
-#FC0174 - neon pink
-#C70554 - maroon
-#310A3F - purple
-#140420 - black
-     */
+
+:root {
+    --rose: #FF7486;
+    --neon: #fc0174;
+    --pink: #ff00b3;
+    --orangish: #c70554;
+    --purple: #310A3F;
+    --darkblue: #15084D;
+    --black: #140420;
+    --lgradient: linear-gradient(to left,var(--black),var(--purple) ,var(--orangish), var(--neon),var(--orangish),var(--purple) ,var(--black));
 }
+
+body{
+    font-family: 'Orbitron';
+    background-color: #140420;
+}
+
+
 
 main {
     font-size: 12px;
     color: white;
     display: flex;
     justify-content: center;
-   
-    padding: 30px 0;
+    margin: 40px 0;
 }
 
 
 header {
-    font-size: 18px;;
-    margin-top: 30px;
+    font-family: 'Press Start 2P';
+    font-size: 24px;
+    margin-top: 40px;
     display: flex;
     justify-content: center;
+    align-content: center;
     text-align: center;
-    -webkit-text-stroke: 1px white;
-    /* background: linear-gradient(-45deg, #140420 ,#5f0a87, #ff00b3 , #5f0a87, black); */
-    animation: gradient 30s ease infinite;
-    background-size: 500% 500%;
+    -webkit-text-stroke: 1px var(--orangish);
+
+    border-bottom: 3px solid;
+    border-image: var(--lgradient) 1;
+    background: linear-gradient(to left, var(--black) 10% ,var(--purple) 20% ,var(--rose) 40%,var(--neon), var(--orangish) 60%,var(--purple) 80%, var(--black) 90% );
+    background-size: 200% auto;
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    animation: shine 3s linear infinite;
 }
 
-@keyframes gradient {
-	0% {
-		background-position: 0% 50%;
-	}
-	50% {
-		background-position: 100% 50%;
-	}
-	100% {
-		background-position: 0% 50%;
-	}
-}
+@keyframes shine {
+    to {
+      background-position: 200% center;
+    }
+  }
+
+/* -------grid and control background-------------- */
 .backpane{
     display: flex;
-    gap: 10%;
-    margin: 0 5em;
+    gap: 8%;
+    margin: 0 10em;
 }
 
 /* ---------------main grid and its cells ------------------ */
 #grid {
-    background: linear-gradient(0deg, #15084D ,#140420 ,#C70554,#140420,#5f0a87);
-    border: 3px solid #C70554;
-    border-radius: 8px;
+    background: black;
+    /* border: 3px solid var(--orangish); */
     display: grid;
     width: 720px;
     height: 720px; 
-    animation: gradient 5s ease infinite;
-    background-size: auto;
-    padding: 0;
+    cursor: crosshair;
 }
 
 .cell {
@@ -72,6 +79,7 @@ header {
     border-left: 1px solid darkgray;
     background-color: transparent;
 }
+
 /* --------cell border classes -------- */
 .cell.noBorder{
     border: none;
@@ -82,68 +90,224 @@ header {
 .borderBottom{
     border-bottom: 1px solid;
 }
-/* ---------------controls and its buttons -------------- */
+
+/* ---------------controls panel and buttons -------------- */
 .controls{
     display: flex;
     flex-direction: column;
-    align-items: flex-start;
     justify-content: center;
-    gap: 10px;
-    width: 250px;
+    width: 300px;
     text-align: center;
-    border: 5px solid #C70554;
-    border-radius: 10px;
-    padding: 0 35px;
+    padding: 0 2.5em;
+    background-color: #000;
+}
+
+.tutorial{
+    margin-bottom: 10px;
 }
 
 button {
+    align-self: center;
     color: white;
-    font-size: 16px;
-    width:13.5em;
+    font-size: 20px;
+    font-family: 'Orbitron';
+    width:10em;
     background: none;
-    border: 2px solid;
     line-height: 1;
-    margin: 0.2em;
-    padding: 0.7em 2em;
-    border: 1px solid #ff00b3;
-    border-radius: 8px;
-}
-.shadetint{
-    display: flex;
-    flex-direction: column;
+    margin: 0.3em;
+    padding: 0.3em;
+    border: 1px solid var(--neon);
+    cursor:pointer;
+    position: relative;
 }
 
-.colorPickers {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    gap:8px;
+button:hover{
+    color: var(--rose);
+    transform: scale(1.05);   
 }
 
-input.grid-color, input.background, input.pen-color {
-
+button.enabled:hover{
+    color: var(--black);
 }
 
+button:after{
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    transition: all 0.5s;
+    box-shadow: 0 0 30px 30px var(--orangish);
+}
+
+button:active:after{
+    box-shadow: 0 0 0 0 var(--neon);
+    opacity: 0.9;
+    transition: 0s;
+}
+
+
+.shade-tint, .sampler-fill, .clear-reset, .gridSlider, .toggle-rainbow{
+    padding: 10px 0;
+    border-top: 1px solid;
+    border-image: var(--lgradient) 1;
+}
+
+
+
+/* -------------------button toggled effect --------------------- */
 .enabled{
-    box-shadow: 5px 10px #5f0a87;
+    background: var(--orangish);
+    box-shadow: 0 0 5px var(--pink),
+                0 0 25px var(--pink),
+                0 0 40px var(--pink);
 }
 
+/* --------color pickers for pen, background and grid----------- */
+.colorPicker {
+    font-size: large;
+    display: flex;
+    align-items: center;
+    text-align: center;
+    column-gap: 10px;
+    height: 40px;
+}
+.colorPicker input{
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    width: 6em;
+    height: 3em;
+    border: none;
+    background-color: transparent;
+    cursor:crosshair;
+}
+
+.colorPicker input::-webkit-color-swatch{
+    border: 1px solid var(--pink);
+    /* border-radius: 5px; */
+    /* border-image: linear-gradient(-20deg, var(--black), var(--purple), var(--neon), var(--orangish), var(--purple), var(--black)) 1; */
+}
+.colorPicker input::-moz-color-swatch{
+    border: 1px solid var(--pink);
+}
+/* ------------------grid slider and grid size indicatoer ------------ */
+.grid-size-number{
+    color: #fc0174;
+}
+
+.gridSlider {
+    font-size: 16px;
+    width: 100%;
+    margin-top: 15px;
+    margin-bottom: -10px;
+    position: relative; 
+}
+.sliderFill { 
+    position: absolute;
+    z-index: 1;
+    top: 25px;
+    left: 0%;
+    width: 25%;
+    height: 1px;
+    background-color: var(--neon);
+}
+
+#slider{
+    position: relative;
+    -webkit-appearance: none;
+    width: 100%;
+    height: 0px;
+    border: 1px solid;
+    border-image: linear-gradient(to right, black 20% ,var(--purple)) 1;
+    border-radius: 10px;
+    outline: none;
+    margin: 15px 0 ;
+    
+    cursor: pointer;
+}
+
+input[type=range]::-webkit-slider-thumb{
+    -webkit-appearance: none;
+    width: 20px;
+    height: 20px;
+    background-color: var(--neon);
+    border-radius: 50%;
+    cursor: pointer;
+    outline: none;
+    box-shadow: 0 0 0 0 var(--neon) ;
+    transition: .1s ease-in-out;
+}
+
+input[type=range]::-webkit-slider-thumb:hover{
+    box-shadow: 0 0 0 8px rgba(199, 5, 84,0.2);
+}
+input[type=range]:active::-webkit-slider-thumb{
+    box-shadow: 0 0 0 11px rgba(199, 5, 84,0.4);
+}
+
+/* -----------------firefox visual support------------- */
+
+input[type=range]::-moz-range-thumb{
+    -webkit-appearance: none;
+    width: 15px;
+    height: 15px;
+    background-color: var(--neon);
+    border-radius: 50%;
+    cursor: pointer;
+    outline: none;
+    box-shadow: 0 0 0 0 var(--neon) ;
+    transition: .1s ease-in-out;
+}
+input[type=range]::-moz-range-thumb:hover{
+    box-shadow: 0 0 0 8px rgba(199, 5, 84,0.2);
+}
+input[type=range]:active::-moz-range-thumb{
+    box-shadow: 0 0 0 11px rgba(199, 5, 84,0.4);
+}
+input[type=range]::-moz-range-progress {
+    height: 1px;
+    background-color: var(--neon);
+}
+
+/* -----------footer and icon ------------- */
 footer{
-    font-size: 8px;
+    font-size: 14px;
     color: white;
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 10px;
-    height: 50px;
-    border-top: 5px solid #C70554;
     text-align: center;
-    
+    gap: 10px;
+    padding-top: 10px;
+    height: 50px;
+    border-top: 3px solid;
+    border-image: var(--lgradient) 1;
 }
 
 .link-icon{
-    width: 20px;
-    height: 20px;
+    width: 30px;
+    height: 30px;
     padding-bottom: 10px;
 }
-  
+
+/* --------gradient animated border (chrome support only)--------- */
+.gradient-border {
+    --angle: 0deg;
+    border: 3px solid;
+    
+    border-image: linear-gradient(var(--angle),var(--orangish), var(--neon),var(--purple),var(--black),var(--purple),var(--neon), var(--orangish)) 1 / 3px;
+	animation: 25s rotate linear infinite;
+}
+@keyframes rotate {
+		100%{--angle:360deg}
+}
+@property --angle {
+    syntax: '<angle>';
+    initial-value: 0deg;
+    inherits: false;
+  }
+
+ 

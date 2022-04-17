@@ -1,7 +1,7 @@
 const DEFAULT_COLOR = "#64C3D3" //pen color
 const DEFAULT_BACK = "#000000" //background color
 const DEFAULT_GRID = "#971C53" //grid lines color
-const DEFAULT_MODE = "user"  
+const DEFAULT_MODE = 'default'  
 const DEFAULT_SIZE = 20;  // NxN grid size
 const DEFAULT_SHADE = -20 //shade value to add to each r,g,b value
 const DEFAULT_TINT = 20 //tint value to add to each r,g,b value
@@ -27,8 +27,11 @@ var mouseDownToggle = false;
 var rightMouseToggle = false;
 var gridToggle = true;
 
-grid.onmousedown =() => mouseDownToggle = true;
-grid.onmouseup =() => {mouseDownToggle = false; rightMouseToggle = false;} 
+penColor.value = DEFAULT_COLOR;
+gridColor.value = DEFAULT_GRID;
+backColor.value = DEFAULT_BACK;
+gridSize.value = DEFAULT_SIZE;
+
 reset.onclick = () => window.location.reload();
 clearGridBtn.onclick = () => createGrid(+gridSize.value);
 gridSize.oninput = () => createGrid(+gridSize.value);
@@ -39,49 +42,59 @@ shadeBtn.onclick = () => changeMode('shade');
 tintBtn.onclick = () => changeMode('tint');
 gridColor.oninput = () => grid.childNodes.forEach(x => x.style.borderColor = gridColor.value)
 backColor.oninput = () => grid.style.background = backColor.value;
-toggleGridBtn.onclick = () => { // grid toggle
+toggleGridBtn.onclick = () => { // grid lines toggle
     grid.childNodes.forEach(x => x.classList.toggle('noBorder'));
     gridToggle = !gridToggle; //toggle the boolean marker
 }
 
-penColor.value = DEFAULT_COLOR;
-gridColor.value = DEFAULT_GRID;
-backColor.value = DEFAULT_BACK;
-gridSize.value = DEFAULT_SIZE;
+
 
 function createGrid(gridSide) { //grid creation
     clear() //clear grid just in case
-    let edges = getRightBottomEdges(gridSide);
+    let edges = getRightBottomEdges(gridSide); //get list of right and bottom edge cells to add border to
     grid.style.gridTemplateColumns = `repeat(${gridSide}, 1fr)`; //generate tracks
     grid.style.gridTemplateRows = `repeat(${gridSide},1fr)`; 
 
     for(let i = 0; i < (gridSide*gridSide); i++){
         const cell = document.createElement('div')
         grid.appendChild(cell).classList.add('cell')
-        cell.setAttribute('id',`${i}`); //number cells for id
-        
-        cell.onmousedown = () => {if(coloringMode != 'fill') colorChange(cell)} //color in on left mouse down but not when in fill mode. Avoids coloring in on right click
-        cell.onclick = () => {if(coloringMode=='fill') colorChange(cell)} //onclick only in fill mode. Otherwise it fills on right click but erases clicked square. Avoids duplicate with onmousedown.
-        cell.oncontextmenu = () => {rightMouseToggle = true; colorChange(cell); }; //'erase' on right mouse click
-        cell.onmouseover= () => {if(mouseDownToggle) colorChange(cell);} //fill grid if right mouse is held
-        if(edges[0].includes(i)) cell.classList.add('borderRight') //add border tright and bottom edges of the grid
+        cell.setAttribute('id',`${i}`); //number cells to convert to row/column for edge detection in adjacentCells()
+        cell.onmouseup =() => {mouseDownToggle = false; rightMouseToggle = false};
+        cell.onmousedown = (e) => mouseDownEvent(e)
+        cell.onclick = () => {if(coloringMode=='fill') colorChange(cell)}//onclick only in fill mode. Otherwise it fills on right click but erases clicked square. Avoids duplicate with onmousedown.
+        cell.onmouseover= () => {if(mouseDownToggle) colorChange(cell)} //fill grid if mouse is held down
+
+        if(edges[0].includes(i)) cell.classList.add('borderRight') //add border to cell if its located on right or bottom edges of the grid
         if(edges[1].includes(i)) cell.classList.add('borderBottom')
     }
+
     sliderFill.style.width = `${gridSide/.8}%` //adjust the slider fill
-    gridSizeNumbers.forEach(x => x.innerText = gridSize.value) //change the grid Num x Num display
+    gridSizeNumbers.forEach(x => x.innerText = gridSize.value) //change Num x Num display
     grid.style.background = backColor.value //color in background
     retainGridLines();
-    
+}
+
+function mouseDownEvent(e){//color in on left mouse when not in fill mode. Avoids coloring in on right click
+    mouseDownToggle = true; 
+    if(isRightClick(e)) {rightMouseToggle = true; colorChange(e.target)} //'erase' on right mouse click
+    if(coloringMode != 'fill') colorChange(e.target)
+}
+
+//check right click since oncontextmenu triggers differently between linux/macOS and Windows. (on click down vs on release)
+function isRightClick(e){ 
+    if ("which" in e)  // Firefox, Chrome, Safari & Opera
+        return e.which == 3; 
+    else if ("button" in e)  // IE, Opera 
+        return e.button == 2; 
 }
 
 clear = () => {while(grid.lastChild){grid.lastChild.remove()}} //remove every cell from the grid
 
-function getRightBottomEdges(side) {
+function getRightBottomEdges(side) {//collect a list of all cells on right and bottom sides of the grid
     let right = [], bottom = [];
     for(let j = (side*side-side); j < side*side; j++) bottom.push(j);
     for(let i =(side-1); i < (side*side); i= i+side) right.push(i);
     return [right, bottom]
-
 }
 
 function retainGridLines (){ // retain grid toggle and color for clear function
@@ -95,11 +108,11 @@ function colorChange(cell){ // main cell coloring function based on coloringMode
     let cellColor = cell.style.backgroundColor
     let gridBack = grid.style.background
 
-    if(rightMouseToggle) cell.style.background = ''; //erase
-    if(coloringMode == 'user' && !rightMouseToggle) //default mode
+    if(rightMouseToggle) cell.style.background = ''; //erase on right mouse click
+    if(coloringMode == 'default' && !rightMouseToggle) //default color in mode
         cell.style.background =  penColor.value;
 
-    if(coloringMode == 'rainbow' && !rightMouseToggle)
+    if(coloringMode == 'rainbow' && !rightMouseToggle) //rainbow - random background color for each cell
         cell.style.background = `rgb(${randomInt(0,255)},${randomInt(0,255)},${randomInt(0,255)})`
 
     if(coloringMode == 'shade' && !rightMouseToggle)
@@ -107,14 +120,14 @@ function colorChange(cell){ // main cell coloring function based on coloringMode
 
     if(coloringMode == 'tint' && !rightMouseToggle)
         cell.style.background = `${adjustColor(cellColor, DEFAULT_TINT)}`
+
     //for some reason, the penColor only accepts hex but background color of each cell or grid is returned as an rgb() value. need to convert rgb to hex
     if(coloringMode == 'sampler' && !rightMouseToggle){
         penColor.value = (cellColor) ? rgbToHex(cellColor) : rgbToHex(gridBack) ;
-        changeMode('user'); //change mode back to coloring after sampling
+        changeMode('default'); //change mode back to default after sampling
     };
     if(coloringMode == 'fill' && !rightMouseToggle) 
         fill(cell, cellColor);
-    
 };
 
 function changeMode(mode) {
@@ -125,7 +138,7 @@ function changeMode(mode) {
         modeButton.classList.add('enabled'); //highlight button
     }
     else {
-        coloringMode = 'user'; //toggle mode back to default
+        coloringMode = 'default'; //toggle mode back to default
         modeButton.classList.remove('enabled'); //remove highlighted button
     }; 
 }
@@ -152,20 +165,18 @@ function rgbToHex(color){ //rgb to hex converter
     var r = (+match[1]).toString(16).padStart(2,'0');
     var g = (+match[2]).toString(16).padStart(2,'0');
     var b = (+match[3]).toString(16).padStart(2,'0');
-
     return '#'+ r + g + b;
 }
 
 
 function fill(cell, givenColor) {
     let id = +cell.id; //convert cell id to number
-    
-    let cellsToCheck = [id];
-    let checkedCells = {}; //store checked cell id:boolean association
+    let cellsToCheck = [id]; //add first cell to list of cells to check
+    let checkedCells = {}; //store already checked cell id:boolean association
     while(cellsToCheck.length){
-        let nextID = cellsToCheck.shift();
-        document.getElementById(nextID).style.background = penColor.value; 
-        cellsToCheck = cellsToCheck.concat(adjacentCells(nextID, givenColor, checkedCells))
+        let nextID = cellsToCheck.shift(); //queue up the next id to check
+        document.getElementById(nextID).style.background = penColor.value; //color in checked cell
+        cellsToCheck = cellsToCheck.concat(adjacentCells(nextID, givenColor, checkedCells)) //add adjacent cells to cellsToCheck list
     }
     return;
 }
@@ -183,19 +194,19 @@ function adjacentCells(id, color, checkedCells){
     const topCell = document.getElementById(`${id-size}`)
     const bottomCell = document.getElementById(`${id+size}`)
     
-    if(column > 0 && !checkedCells[id-1]){//check if left cell  has not been checked, without going over edges of grid
+    if(column > 0 && !checkedCells[id-1]){//check if left cell has not been checked, without going over edges of grid
         checkedCells[id-1] = true; //add cell to checked object
-        if(leftCell.style.background == color) //check if same color as the cell clicked on originally?
+        if(leftCell.style.backgroundColor == color) //check if same color as the cell clicked on originally?
             adjacent.push(id-1)//add to adjacent
     }
     if(column < size-1 && !checkedCells[id+1]){//right
         checkedCells[id+1] = true;
-        if(rightCell.style.background == color)
+        if(rightCell.style.backgroundColor == color)
             adjacent.push(id+1)
     }
     if(row > 0 && !checkedCells[id-size]){//above
         checkedCells[id-size] = true;
-        if(topCell.style.background == color)
+        if(topCell.style.backgroundColor == color)
             adjacent.push(id-size)
     }
     if(row < size-1 && !checkedCells[id+size]){//below

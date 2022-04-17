@@ -128,6 +128,7 @@ function colorChange(cell){ // main cell coloring function based on coloringMode
     };
     if(coloringMode == 'fill' && !rightMouseToggle) 
         fill(cell, cellColor);
+    
 };
 
 function changeMode(mode) {

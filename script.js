@@ -106,7 +106,7 @@ function retainGridLines (){ // retain grid toggle and color for clear function
 
 function colorChange(cell){ // main cell coloring function based on coloringMode
     let cellColor = cell.style.backgroundColor
-    let gridBack = grid.style.background
+    let gridBack = grid.style.background 
 
     if(rightMouseToggle) cell.style.background = ''; //erase on right mouse click
     if(coloringMode == 'default' && !rightMouseToggle) //default color in mode
